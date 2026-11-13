@@ -6,7 +6,7 @@ pub struct GeocodingResponse {
     pub results: Option<Vec<GeoResult>>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct GeoResult {
     pub name: String,
     pub latitude: f64,
@@ -15,7 +15,7 @@ pub struct GeoResult {
     pub admin1: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ForecastResponse {
     #[serde(skip)]
     pub location: GeoResult,
@@ -23,7 +23,7 @@ pub struct ForecastResponse {
     pub daily: DailyWeather,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CurrentWeather {
     pub temperature_2m: f64,
     pub apparent_temperature: f64,
@@ -33,7 +33,7 @@ pub struct CurrentWeather {
     pub is_day: u8,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DailyWeather {
     pub time: Vec<String>,
     pub weather_code: Vec<u8>,

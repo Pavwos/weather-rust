@@ -1,22 +1,32 @@
 # Clima
 
-Aplicativo desktop em Rust que mostra o clima atual e a previsão de cinco dias usando a API gratuita Open-Meteo.
+Aplicativo desktop pessoal para consultar o clima atual e a previsão de cinco dias pela API Open-Meteo. O backend é Rust com Tauri v2; a interface é TypeScript, CSS e Vite, sem framework.
 
-## Executar e compilar
+## Pré-requisitos
+
+- Rust e a toolchain MSVC do Visual Studio Build Tools
+- Node.js LTS e npm
+- WebView2 Runtime (normalmente já instalado no Windows 10 e 11)
+
+## Desenvolvimento
+
+Na raiz do projeto:
 
 ```sh
-cargo run
-cargo build --release
+npm install
+npm run tauri dev
 ```
 
-O executável é gerado em `target/release/clima.exe` no Windows e `target/release/clima` no Linux/macOS.
+## Gerar o aplicativo
 
-No Windows, para criar um atalho, copie o executável para uma pasta fixa (por exemplo, `C:\Apps\Clima`) e clique nele com o botão direito > **Criar atalho**. Mova o atalho para a Área de Trabalho ou para o Menu Iniciar.
+```sh
+npm run tauri build
+```
 
-Digite o nome da cidade na busca e pressione Enter ou clique em **Buscar**. Use **°C / °F** para alternar unidades; a cidade padrão pode ser salva no próprio app. A previsão é atualizada automaticamente a cada 15 minutos.
+No Windows, o executável fica em `src-tauri/target/release/clima.exe`. O instalador NSIS fica em `src-tauri/target/release/bundle/nsis/`.
 
 ## Configuração
 
-O arquivo `config.toml` fica na pasta de configuração do sistema, dentro do diretório `clima`. O app guarda a cidade padrão, a última cidade pesquisada e as unidades.
+As preferências guardam cidade padrão, última cidade pesquisada e unidade. No Windows, o arquivo existente continua em `%APPDATA%\weather-cli\config.toml`.
 
-Os arquivos `assets/NotoEmoji-Regular.ttf` e `assets/icon.png` são opcionais. Quando presentes, a fonte de emoji e o ícone são incorporados ao app.
+As chamadas de geocodificação e previsão usam a Open-Meteo e precisam de internet. A interface e os recursos visuais são empacotados localmente.

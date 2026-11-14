@@ -9,7 +9,7 @@ import {
   formatWind,
   locationLabel,
 } from "./format";
-import type { AppState, WeatherData } from "./state";
+import type { AppState, Units, WeatherData } from "./state";
 
 export function renderApp(root: HTMLElement, state: AppState): void {
   const weather = state.weather;
@@ -120,15 +120,16 @@ function renderWeather(weather: WeatherData, state: AppState): string {
           <h2 id="forecast-title">Próximos dias</h2>
         </div>
         <ul class="forecast-list">
-          ${weather.daily.map(renderDay).join("")}
+          ${weather.daily.map((day) => renderDay(day, weather.units)).join("")}
         </ul>
       </section>
     </main>
   `;
 }
 
-function renderDay(day: WeatherData["daily"][number]): string {
+function renderDay(day: WeatherData["daily"][number], units: Units): string {
   const date = formatForecastDay(day.date);
+  const unit = units === "imperial" ? "F" : "C";
   return `
     <li class="forecast-day">
       <div class="forecast-date">
@@ -140,7 +141,7 @@ function renderDay(day: WeatherData["daily"][number]): string {
         <span class="forecast-description">${escapeHtml(day.description)}</span>
         <span class="rain-chance">${formatPercent(day.precipitationProbability)} chuva</span>
       </div>
-      <div class="forecast-temperatures" aria-label="Máxima ${formatTemperature(day.tempMax)} graus, mínima ${formatTemperature(day.tempMin)} graus">
+      <div class="forecast-temperatures" aria-label="Máxima ${formatTemperature(day.tempMax)} graus ${unit}, mínima ${formatTemperature(day.tempMin)} graus ${unit}">
         <strong>${formatTemperature(day.tempMax)}°</strong>
         <span>${formatTemperature(day.tempMin)}°</span>
       </div>

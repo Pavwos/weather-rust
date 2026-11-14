@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T20:45:12-03:00",
+  "title": "Design System: Clima",
+  "seededFrom": {
+    "world": "digital-design-canon-dark-first-developer-console",
+    "seed": "seed:f78d3012c3843a84"
+  },
+  "extensions": {
+    "colorMeta": {
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Grafite de observação",
+        "canonical": "#101820",
+        "tonalRamp": [
+          "#080e13",
+          "#101820",
+          "#18232c",
+          "#253a4a",
+          "#405764",
+          "#70848d",
+          "#b6c4ca",
+          "#e8eef0"
+        ]
+      },
+      "light-background": {
+        "role": "neutral",
+        "displayName": "Névoa clara",
+        "canonical": "#e8eff0",
+        "tonalRamp": [
+          "#101b20",
+          "#1d3038",
+          "#304953",
+          "#526771",
+          "#7d929a",
+          "#a9b9be",
+          "#cbd7d9",
+          "#e8eff0"
+        ]
+      },
+      "deep-slate": {
+        "role": "neutral",
+        "displayName": "Lousa atmosférica",
+        "canonical": "#253a4a",
+        "tonalRamp": [
+          "#0b1117",
+          "#14212b",
+          "#253a4a",
+          "#3b5667",
+          "#58717f",
+          "#84969e",
+          "#bac6ca",
+          "#eef1f1"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Branco atmosférico",
+        "canonical": "#e8eef0",
+        "tonalRamp": [
+          "#11191c",
+          "#26363c",
+          "#40545e",
+          "#647780",
+          "#8d9da3",
+          "#b6c4ca",
+          "#ced9dc",
+          "#e8eef0"
+        ]
+      },
+      "ink-light": {
+        "role": "neutral",
+        "displayName": "Grafite de leitura",
+        "canonical": "#17252d",
+        "tonalRamp": [
+          "#0a1115",
+          "#17252d",
+          "#293b44",
+          "#40545e",
+          "#667a83",
+          "#91a1a7",
+          "#bdc9cc",
+          "#e8eff0"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Cinza de nuvem noturno",
+        "canonical": "#b6c4ca",
+        "tonalRamp": [
+          "#172126",
+          "#2c3c43",
+          "#40545e",
+          "#657780",
+          "#89999f",
+          "#b6c4ca",
+          "#d0dadd",
+          "#edf1f2"
+        ]
+      },
+      "muted-light": {
+        "role": "neutral",
+        "displayName": "Cinza de nuvem diurno",
+        "canonical": "#40545e",
+        "tonalRamp": [
+          "#11191d",
+          "#253840",
+          "#40545e",
+          "#61757d",
+          "#84969c",
+          "#aebbc0",
+          "#d1dadd",
+          "#eef1f2"
+        ]
+      },
+      "accent-dark": {
+        "role": "primary",
+        "displayName": "Destaque de luz",
+        "canonical": "#edcc82",
+        "tonalRamp": [
+          "#33270f",
+          "#58451c",
+          "#80682e",
+          "#aa8c4c",
+          "#c3a968",
+          "#edcc82",
+          "#f4dfae",
+          "#fbf3df"
+        ]
+      },
+      "accent-light": {
+        "role": "primary",
+        "displayName": "Destaque diurno",
+        "canonical": "#795512",
+        "tonalRamp": [
+          "#1d1407",
+          "#38270b",
+          "#57400f",
+          "#795512",
+          "#9d741f",
+          "#bd963e",
+          "#dec277",
+          "#f5e8c8"
+        ]
+      },
+      "rain-dark": {
+        "role": "secondary",
+        "displayName": "Chuva fria",
+        "canonical": "#8fc9d4",
+        "tonalRamp": [
+          "#102126",
+          "#1b3941",
+          "#285660",
+          "#3f7b87",
+          "#65a5b0",
+          "#8fc9d4",
+          "#b9dce1",
+          "#e8f4f5"
+        ]
+      },
+      "rain-light": {
+        "role": "secondary",
+        "displayName": "Chuva diurna",
+        "canonical": "#176f81",
+        "tonalRamp": [
+          "#081b20",
+          "#0f3540",
+          "#145361",
+          "#176f81",
+          "#368c9d",
+          "#69a9b4",
+          "#a5cbd0",
+          "#e0eff0"
+        ]
+      },
+      "action-dark": {
+        "role": "neutral",
+        "displayName": "Superfície de ação",
+        "canonical": "#d7e5e8",
+        "tonalRamp": [
+          "#11191c",
+          "#26383d",
+          "#41565c",
+          "#647a80",
+          "#8da0a5",
+          "#b2c2c6",
+          "#d7e5e8",
+          "#f0f6f7"
+        ]
+      },
+      "action-ink-dark": {
+        "role": "neutral",
+        "displayName": "Tinta da ação escura",
+        "canonical": "#18232c",
+        "tonalRamp": [
+          "#090e12",
+          "#18232c",
+          "#2c3d47",
+          "#4b5e66",
+          "#72858b",
+          "#9eacb0",
+          "#c6d0d2",
+          "#edf1f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Temperatura",
+        "purpose": "Leitura numérica dominante do clima atual."
+      },
+      "headline": {
+        "displayName": "Boas-vindas",
+        "purpose": "Título responsivo da tela inicial."
+      },
+      "title": {
+        "displayName": "Cidade",
+        "purpose": "Nome da localidade na leitura atual."
+      },
+      "body": {
+        "displayName": "Texto geral",
+        "purpose": "Texto corrente da interface."
+      },
+      "label": {
+        "displayName": "Ação compacta",
+        "purpose": "Ações e rótulos breves."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "motion-fast",
+        "value": "180ms",
+        "purpose": "Transições de cor e atmosfera."
+      },
+      {
+        "name": "motion-curve",
+        "value": "cubic-bezier(0.2, 0.75, 0.25, 1)",
+        "purpose": "Curva de transição curta dos controles e do fundo."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "desktop",
+        "value": "720px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Search Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal da busca meteorológica.",
+      "html": "<button class=\"ds-search-button\" type=\"button\">Buscar</button>",
+      "css": ".ds-search-button { min-height: 2.75rem; min-width: 5.5rem; padding: 0 1rem; border: 0; border-radius: 0.6rem; color: #18232c; background: #d7e5e8; font: 650 0.875rem/1.45 \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; white-space: nowrap; transition: filter 180ms cubic-bezier(0.2, 0.75, 0.25, 1); } .ds-search-button:hover { filter: brightness(1.12); } .ds-search-button:focus-visible { outline: 2px solid #8fc9d4; outline-offset: 3px; } .ds-search-button:active { filter: brightness(0.96); }"
+    },
+    {
+      "name": "Refresh Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Ação circular de atualização com ícone SVG inline.",
+      "html": "<button class=\"ds-refresh-button\" type=\"button\" aria-label=\"Atualizar clima\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><path d=\"M20 11a13 13 0 0 1 22-4l3 3M45 5v5h-5M44 21a13 13 0 0 1-22 4l-3-3M19 27v-5h5\"/></svg></button>",
+      "css": ".ds-refresh-button { display: grid; width: 2.4rem; min-height: 2.4rem; place-items: center; padding: 0; border: 0; border-radius: 999px; color: #b6c4ca; background: transparent; transition: color 180ms cubic-bezier(0.2, 0.75, 0.25, 1), background-color 180ms cubic-bezier(0.2, 0.75, 0.25, 1); } .ds-refresh-button svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } .ds-refresh-button:hover { color: #e8eef0; background: rgb(39 58 70 / 88%); } .ds-refresh-button:focus-visible { outline: 2px solid #8fc9d4; outline-offset: 3px; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Campo flexível para busca de cidade.",
+      "html": "<input class=\"ds-search-input\" type=\"search\" placeholder=\"Buscar cidade\" aria-label=\"Buscar cidade\">",
+      "css": ".ds-search-input { width: 100%; min-width: 0; height: 2.75rem; padding: 0 1rem; border: 1px solid rgb(194 218 227 / 18%); border-radius: 0.6rem; color: #e8eef0; background: rgb(14 25 33 / 72%); caret-color: #edcc82; font: 400 0.875rem/1.45 \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; transition: border-color 180ms cubic-bezier(0.2, 0.75, 0.25, 1), background-color 180ms cubic-bezier(0.2, 0.75, 0.25, 1); } .ds-search-input::placeholder { color: #b6c4ca; opacity: 0.9; } .ds-search-input:hover { border-color: color-mix(in srgb, #8fc9d4, transparent 48%); } .ds-search-input:focus-visible { outline: 2px solid #8fc9d4; outline-offset: 3px; }"
+    },
+    {
+      "name": "Unit Switch",
+      "kind": "chip",
+      "refersTo": "button-unit-active",
+      "description": "Pílula segmentada para °C e °F.",
+      "html": "<div class=\"ds-unit-switch\" role=\"group\" aria-label=\"Unidade de temperatura\"><button type=\"button\">°C</button><button class=\"is-active\" type=\"button\" aria-pressed=\"true\">°F</button></div>",
+      "css": ".ds-unit-switch { display: flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid rgb(194 218 227 / 18%); border-radius: 999px; background: rgb(14 25 33 / 72%); } .ds-unit-switch button { min-width: 2.25rem; min-height: 2rem; padding: 0 0.5rem; border: 0; border-radius: 999px; color: #b6c4ca; background: transparent; font: 400 0.875rem/1.45 \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-unit-switch button:hover { color: #e8eef0; background: rgb(39 58 70 / 88%); } .ds-unit-switch button.is-active { color: #18232c; background: #d7e5e8; } .ds-unit-switch button:focus-visible { outline: 2px solid #8fc9d4; outline-offset: 3px; }"
+    },
+    {
+      "name": "Top Bar",
+      "kind": "nav",
+      "description": "Wordmark, unidade e atualização na faixa superior.",
+      "html": "<header class=\"ds-topbar\"><span class=\"ds-wordmark\">Clima</span><div class=\"ds-toolbar\"><div class=\"ds-unit-switch\" role=\"group\" aria-label=\"Unidade de temperatura\"><button type=\"button\">°C</button><button class=\"is-active\" type=\"button\" aria-pressed=\"true\">°F</button></div><button class=\"ds-refresh-button\" type=\"button\" aria-label=\"Atualizar clima\"><svg class=\"ds-action-icon\" viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M20 11a13 13 0 0 1 22-4l3 3\"/><path d=\"M45 5v5h-5\"/><path d=\"M44 21a13 13 0 0 1-22 4l-3-3\"/><path d=\"M19 27v-5h5\"/></svg></button></div></header>",
+      "css": ".ds-topbar { display: flex; min-height: 2.5rem; align-items: center; justify-content: space-between; color: #e8eef0; } .ds-wordmark { color: inherit; font: 720 1.1rem/1.45 \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.04em; } .ds-toolbar { display: flex; align-items: center; gap: 0.5rem; } .ds-unit-switch { display: flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid rgb(194 218 227 / 18%); border-radius: 999px; background: rgb(14 25 33 / 72%); } .ds-unit-switch button { min-width: 2.25rem; min-height: 2rem; padding: 0 0.5rem; border: 0; border-radius: 999px; color: #b6c4ca; background: transparent; font: 400 0.875rem/1.45 \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-unit-switch button:hover { color: #e8eef0; background: rgb(39 58 70 / 88%); } .ds-unit-switch button.is-active { color: #18232c; background: #d7e5e8; } .ds-refresh-button { display: grid; width: 2.4rem; min-height: 2.4rem; place-items: center; padding: 0; border: 0; border-radius: 999px; color: #b6c4ca; background: transparent; transition: color 180ms cubic-bezier(0.2, 0.75, 0.25, 1), background-color 180ms cubic-bezier(0.2, 0.75, 0.25, 1); } .ds-action-icon { width: 1.25rem; height: 1.25rem; } .ds-refresh-button:hover { color: #e8eef0; background: rgb(39 58 70 / 88%); } .ds-refresh-button:focus-visible { outline: 2px solid #8fc9d4; outline-offset: 3px; }"
+    },
+    {
+      "name": "Weather Metrics",
+      "kind": "custom",
+      "description": "Três medidas compactas separadas por regras horizontais.",
+      "html": "<dl class=\"ds-weather-metrics\"><div><dt>Sensação</dt><dd>24°</dd></div><div><dt>Umidade</dt><dd>68%</dd></div><div><dt>Vento</dt><dd>12 km/h</dd></div></dl>",
+      "css": ".ds-weather-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0.35rem 0; border-top: 1px solid rgb(194 218 227 / 18%); border-bottom: 1px solid rgb(194 218 227 / 18%); font-family: \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; } .ds-weather-metrics div { min-width: 0; } .ds-weather-metrics dt { color: #b6c4ca; font-size: 0.73rem; } .ds-weather-metrics dd { margin: 0.3rem 0 0; color: #e8eef0; font-size: 0.95rem; font-weight: 620; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Forecast Row",
+      "kind": "custom",
+      "description": "Linha diária com chance de chuva e amplitudes térmicas.",
+      "html": "<div class=\"ds-forecast-day\"><div class=\"ds-date\"><strong>Sex.</strong><span>14/11</span></div><svg class=\"ds-weather-icon\" viewBox=\"0 0 64 64\" aria-hidden=\"true\"><path d=\"M17 48h31a10 10 0 0 0 0-20 13 13 0 0 0-25-3 11 11 0 0 0-6 23Z\"/><path d=\"m21 43-3 8m16-8-3 8m16-8-3 8\"/></svg><div class=\"ds-condition\"><span>Chuva fraca</span><small>70% chuva</small></div><div class=\"ds-temperatures\"><strong>26°</strong><span>18°</span></div></div>",
+      "css": ".ds-forecast-day { display: grid; min-height: 2.5rem; grid-template-columns: 3.05rem 2rem minmax(0, 1fr) auto; align-items: center; gap: 0.5rem; border-top: 1px solid rgb(194 218 227 / 18%); color: #e8eef0; font: 400 0.75rem/1.2 \"IBM Plex Sans\", ui-sans-serif, system-ui, sans-serif; } .ds-date { display: grid; gap: 1px; } .ds-date strong { font-weight: 630; text-transform: capitalize; } .ds-date span, .ds-condition small { color: #b6c4ca; font-size: 0.67rem; } .ds-weather-icon { width: 1.7rem; height: 1.7rem; fill: none; stroke: #edcc82; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } .ds-condition { display: grid; min-width: 0; gap: 1px; } .ds-condition span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-condition small { color: #8fc9d4; } .ds-temperatures { display: flex; gap: 0.5rem; font-variant-numeric: tabular-nums; } .ds-temperatures strong { font-weight: 650; } .ds-temperatures span { color: #b6c4ca; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Leitura do céu",
+    "overview": "Clima é uma interface Operate para consultar o tempo de relance. A composição prioriza a temperatura atual, mantém condição e métricas compactas e apresenta a previsão como uma lista cronológica, sem cartões aninhados. A linguagem é calma e funcional: grafite, separadores finos e controles familiares.\n\nA atmosfera é um campo radial discreto, ligado à condição atual e ao período do dia. Ela colore o ambiente sem deslocar conteúdo nem competir com temperatura ou precipitação. A IBM Plex Sans variável é empacotada localmente; os pictogramas meteorológicos e de ação são SVGs inline.",
+    "keyCharacteristics": [
+      "Temperatura como foco visual dominante; chuva fácil de localizar.",
+      "Atmosfera de fundo sensível ao céu, inclusive à diferença entre dia e noite.",
+      "Lista meteorológica direta, com separadores finos em vez de cartões.",
+      "Uma única família tipográfica local e ícones SVG de traço."
+    ],
+    "rules": [
+      {
+        "name": "The Atmosphere-Follows-the-Sky Rule",
+        "body": "A luz radial muda com a condição e o período do dia, mas permanece sutil e atrás dos dados.",
+        "section": "colors"
+      },
+      {
+        "name": "The Temperature-First Rule",
+        "body": "Preserve a temperatura como único foco dominante; condição, métricas e previsão ficam em níveis tipográficos menores.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do manter temperatura como foco dominante e precipitação facilmente escaneável.",
+      "Do usar IBM Plex Sans empacotada, números tabulares e SVGs inline para ícones.",
+      "Do conservar a hierarquia em uma coluna no mobile e em duas colunas a partir de 720px.",
+      "Do manter o campo atmosférico atrás dos dados e ajustar sua tonalidade ao céu e ao tema."
+    ],
+    "donts": [
+      "Don't deixar a atmosfera competir com a temperatura ou com a previsão.",
+      "Don't converter a previsão em cartões aninhados; a gramática implementada é uma lista com separadores.",
+      "Don't introduzir uma segunda família tipográfica ou depender de fonte remota."
+    ]
+  }
+}

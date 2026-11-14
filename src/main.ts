@@ -1,9 +1,6 @@
 import { fetchWeather, getConfig, saveConfig, setDefaultCity, toApiError } from "./api";
 import { renderApp } from "./render";
 import { createInitialState, type AppState, type Units } from "./state";
-import "./styles/tokens.css";
-import "./styles/base.css";
-import "./styles/components.css";
 
 function getAppRoot(): HTMLElement {
   const element = document.querySelector<HTMLElement>("#app");

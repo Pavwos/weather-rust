@@ -29,10 +29,9 @@ export function formatForecastDay(date: string): {
       .replace(/\.$/, ""),
     date: new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
-      month: "short",
+      month: "2-digit",
     })
-      .format(parsedDate)
-      .replace(/\.$/, ""),
+      .format(parsedDate),
   };
 }
 

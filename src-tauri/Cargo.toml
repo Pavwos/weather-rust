@@ -1,25 +1,32 @@
 [package]
 name = "clima"
-version = "0.1.0"
+version = "0.2.0"
+description = "Aplicativo pessoal de clima"
 edition = "2021"
+
+[lib]
+name = "clima_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
 
 [[bin]]
 name = "clima"
 path = "src/main.rs"
 
+[build-dependencies]
+tauri-build = "2.7.4"
+
 [dependencies]
 anyhow = "1"
 chrono = "0.4"
 directories = "5"
-eframe = { version = "0.33", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tokio = { version = "1", features = ["full"] }
+tauri = "2.12.5"
 toml = "0.8"
 
 [profile.release]
-opt-level = "z"
+opt-level = "s"
 lto = true
 codegen-units = 1
 strip = true

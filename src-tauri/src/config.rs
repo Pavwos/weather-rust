@@ -3,7 +3,7 @@ use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 use std::{fs, path::PathBuf};
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(default)]
 pub struct Config {
     pub default_city: Option<String>,
@@ -63,7 +63,7 @@ impl Config {
 }
 
 fn config_path() -> Result<PathBuf> {
-    let directories = ProjectDirs::from("", "", "clima")
+    let directories = ProjectDirs::from("", "", "weather-cli")
         .context("Não foi possível localizar a pasta de configuração do sistema")?;
     Ok(directories.config_dir().join("config.toml"))
 }
@@ -86,5 +86,21 @@ mod tests {
         assert_eq!(config.default_city, None);
         assert_eq!(config.units, "metric");
         assert_eq!(config.last_city, None);
+    }
+
+    #[test]
+    fn uses_weather_cli_project_directory() {
+        let path = super::config_path().expect("diretório de configuração disponível");
+        assert_eq!(
+            path.parent()
+                .and_then(|parent| parent.parent())
+                .and_then(|parent| parent.file_name())
+                .and_then(|name| name.to_str()),
+            Some("weather-cli")
+        );
+        assert_eq!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("config.toml")
+        );
     }
 }

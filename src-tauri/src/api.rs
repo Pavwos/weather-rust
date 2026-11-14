@@ -7,8 +7,8 @@ use std::{
 };
 
 use crate::{
+    models::Units,
     models::{ForecastResponse, GeocodingResponse},
-    Units,
 };
 
 const GEOCODING_URL: &str = "https://geocoding-api.open-meteo.com/v1/search";
@@ -143,7 +143,9 @@ fn cached_forecast(
 
 fn request_error(error: reqwest::Error, context: &str) -> anyhow::Error {
     if error.is_timeout() {
-        anyhow!("Tempo limite de 10 segundos excedido. Verifique sua conexão e tente novamente.")
+        anyhow::Error::new(error).context(
+            "Tempo limite de 10 segundos excedido. Verifique sua conexão e tente novamente.",
+        )
     } else {
         anyhow::Error::new(error).context(context.to_owned())
     }

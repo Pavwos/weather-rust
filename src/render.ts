@@ -141,9 +141,10 @@ function renderDay(day: WeatherData["daily"][number], units: Units): string {
         <span class="forecast-description">${escapeHtml(day.description)}</span>
         <span class="rain-chance">${formatPercent(day.precipitationProbability)} chuva</span>
       </div>
-      <div class="forecast-temperatures" aria-label="Máxima ${formatTemperature(day.tempMax)} graus ${unit}, mínima ${formatTemperature(day.tempMin)} graus ${unit}">
-        <strong>${formatTemperature(day.tempMax)}°</strong>
-        <span>${formatTemperature(day.tempMin)}°</span>
+      <div class="forecast-temperatures" role="group" aria-label="Máxima ${formatTemperature(day.tempMax)} graus ${unit}, mínima ${formatTemperature(day.tempMin)} graus ${unit}">
+        <strong title="Máxima">${formatTemperature(day.tempMax)}°</strong>
+        <span class="forecast-temperature-divider" aria-hidden="true"></span>
+        <span title="Mínima">${formatTemperature(day.tempMin)}°</span>
       </div>
     </li>
   `;

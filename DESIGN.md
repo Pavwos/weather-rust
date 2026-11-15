@@ -21,7 +21,7 @@ typography:
     fontFamily: "IBM Plex Sans, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(3.75rem, 19vw, 4.5rem)"
     fontWeight: 400
-    lineHeight: 0.95
+    lineHeight: 1.05
     letterSpacing: "-0.045em"
   headline:
     fontFamily: "IBM Plex Sans, ui-sans-serif, system-ui, sans-serif"
@@ -131,7 +131,7 @@ A paleta combina um grafite azulado escuro e uma alternativa clara com texto de 
 **Character:** Uma família variável sem serifa mantém a leitura coesa e direta. Os números meteorológicos usam algarismos tabulares; tamanhos e pesos variam por função, não por troca de família.
 
 ### Hierarchy
-- **Display** (400, `clamp(3.75rem, 19vw, 4.5rem)`, 0.95): temperatura atual, com unidade menor alinhada ao topo.
+- **Display** (400, `clamp(3.75rem, 19vw, 4.5rem)`, 1.05): temperatura atual, com unidade menor alinhada ao topo e espaço inferior para evitar o corte dos algarismos.
 - **Headline** (560, `clamp(1.75rem, 7vw, 2.3rem)`, 1.08): título de boas-vindas responsivo.
 - **Title** (650, 1.1rem, entrelinha padrão): nome da cidade; títulos de seção usam 0.95rem e peso 650.
 - **Body** (400, 0.875rem, 1.45): texto geral; descrições e condições descem para escalas compactas.
@@ -141,7 +141,7 @@ A paleta combina um grafite azulado escuro e uma alternativa clara com texto de 
 
 ## Layout
 
-O topo mantém marca e controles de unidade/atualização, seguido pela busca. Em telas estreitas, a leitura atual precede a previsão em uma coluna; a faixa de métricas mantém três colunas e os horários do sol duas. A partir de 720px, `.weather-view` muda para duas colunas (0.88fr / 1.12fr), com mínimo de 17rem para o clima atual, 25rem para previsão e intervalo responsivo de 2rem a 7rem. O conteúdo principal tem largura máxima de 72rem.
+O topo mantém marca e controles de unidade/atualização, seguido pela busca. Em telas estreitas, a leitura atual precede a previsão em uma coluna; a faixa de métricas mantém três colunas e os horários do sol duas, com rótulo e horário agrupados verticalmente. A partir de 720px, `.weather-view` muda para duas colunas fluidas (0.88fr / 1.12fr), com intervalo responsivo de 1.5rem a 2.5rem. O conteúdo principal tem largura máxima de 72rem.
 
 No mobile, o app-shell usa 0.5rem no topo, 1rem nas laterais e 0.75rem na base; no desktop, passa a 2rem no topo e laterais fluidas entre 2rem e 6rem. O ritmo vem da escala de 0.25rem a 2.5rem. A previsão é uma lista em linhas de pelo menos 2.5rem no mobile e 3.75rem no desktop, com um separador superior por dia.
 
@@ -172,8 +172,8 @@ Controles e campos usam cantos suaves de 0.6rem; alternância de unidades e bot�
 
 ### Weather Reading
 - **Current conditions:** cidade e localidade precedem condição e temperatura; um SVG meteorológico de traço acompanha a leitura atual.
-- **Metrics:** sensação, umidade e vento formam uma grade de três colunas; nascer e pôr do sol ficam em duas colunas.
-- **Forecast row:** data, ícone SVG, condição, chance de chuva e temperaturas máxima/mínima aparecem na mesma linha, separadas por borda superior.
+- **Metrics:** sensação, umidade e vento formam uma grade de três colunas; nascer e pôr do sol ficam em dois grupos com rótulo e horário.
+- **Forecast row:** data, ícone SVG, condição, chance de chuva e temperaturas máxima/mínima aparecem na mesma linha, separadas por borda superior; a mínima usa cor secundária e um divisor sutil.
 - **Sky atmosphere:** a condição do céu no elemento raiz escolhe o gradiente; variantes diurnas são quentes e noturnas frias, com paleta própria em cada tema.
 
 ## Do's and Don'ts

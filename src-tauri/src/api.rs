@@ -91,6 +91,11 @@ pub async fn fetch_forecast(city: &str, units: Units, days: u8) -> Result<Foreca
             "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"
                 .to_owned(),
         ),
+        (
+            "hourly",
+            "temperature_2m,precipitation_probability,precipitation,weather_code,relative_humidity_2m,is_day"
+                .to_owned(),
+        ),
         ("timezone", "auto".to_owned()),
         ("forecast_days", days.to_string()),
     ]);
@@ -154,7 +159,7 @@ fn request_error(error: reqwest::Error, context: &str) -> anyhow::Error {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::{CurrentWeather, DailyWeather, GeoResult};
+    use crate::models::{CurrentWeather, DailyWeather, GeoResult, HourlyWeather};
 
     fn sample_forecast() -> ForecastResponse {
         ForecastResponse {
@@ -166,12 +171,22 @@ mod tests {
                 admin1: Some("São Paulo".to_owned()),
             },
             current: CurrentWeather {
+                time: "2026-11-14T09:00".to_owned(),
                 temperature_2m: 20.0,
                 apparent_temperature: 20.0,
                 relative_humidity_2m: 60,
                 wind_speed_10m: 10.0,
                 weather_code: 0,
                 is_day: 1,
+            },
+            hourly: HourlyWeather {
+                time: Vec::new(),
+                temperature_2m: Vec::new(),
+                precipitation_probability: Vec::new(),
+                precipitation: Vec::new(),
+                relative_humidity_2m: Vec::new(),
+                weather_code: Vec::new(),
+                is_day: Vec::new(),
             },
             daily: DailyWeather {
                 time: Vec::new(),

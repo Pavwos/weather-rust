@@ -1,6 +1,17 @@
-import { fetchWeather, getConfig, saveConfig, setDefaultCity, toApiError } from "./api";
+import {
+  checkRainAlerts,
+  fetchWeather,
+  getConfig,
+  saveConfig,
+  setDefaultCity,
+  toApiError,
+} from "./api";
 import { renderApp } from "./render";
 import { createInitialState, type AppState, type Units } from "./state";
+import {
+  isPermissionGranted,
+  requestPermission,
+} from "@tauri-apps/plugin-notification";
 
 function getAppRoot(): HTMLElement {
   const element = document.querySelector<HTMLElement>("#app");
@@ -65,11 +76,21 @@ async function loadWeather(city: string): Promise<void> {
     state.error = null;
     updateView();
 
+    let configSaved = false;
     try {
       await saveConfig(state.config);
+      configSaved = true;
     } catch (error) {
       state.error = toApiError(error);
       updateView();
+    }
+    if (configSaved && state.config.rain_alerts) {
+      try {
+        await checkRainAlerts();
+      } catch {
+        state.notice = "Não foi possível verificar a chuva agora. O aviso continua ativo.";
+        updateView();
+      }
     }
   } catch (error) {
     state.phase = "error";
@@ -79,6 +100,49 @@ async function loadWeather(city: string): Promise<void> {
       state.config = { ...state.config, units: state.weather.units };
     }
     updateView();
+  }
+}
+
+async function changeRainAlerts(enabled: boolean, input: HTMLInputElement): Promise<void> {
+  if (state.savingRainAlerts || enabled === state.config.rain_alerts) {
+    return;
+  }
+  const restoreFocus = document.activeElement === input;
+  state.savingRainAlerts = true;
+  state.error = null;
+  state.notice = null;
+  input.disabled = true;
+
+  try {
+    if (enabled) {
+      const granted =
+        (await isPermissionGranted()) || (await requestPermission()) === "granted";
+      if (!granted) {
+        state.notice =
+          "A permissão para notificações não foi concedida. O aviso de chuva permaneceu desligado.";
+        return;
+      }
+    }
+
+    const config = { ...state.config, rain_alerts: enabled };
+    await saveConfig(config);
+    state.config = config;
+    state.notice = enabled ? "Avisos de chuva ativados." : "Avisos de chuva desativados.";
+    if (enabled && config.last_city) {
+      try {
+        await checkRainAlerts();
+      } catch {
+        state.notice = "Avisos ativados, mas não foi possível verificar a chuva agora.";
+      }
+    }
+  } catch (error) {
+    state.error = toApiError(error);
+  } finally {
+    state.savingRainAlerts = false;
+    updateView();
+    if (restoreFocus) {
+      root.querySelector<HTMLInputElement>('[data-action="rain-alerts"]')?.focus();
+    }
   }
 }
 
@@ -144,6 +208,16 @@ root.addEventListener("submit", (event) => {
   const input = form.elements.namedItem("city");
   if (input instanceof HTMLInputElement) {
     void loadWeather(input.value);
+  }
+});
+
+root.addEventListener("change", (event) => {
+  const target = event.target;
+  if (
+    target instanceof HTMLInputElement &&
+    target.dataset.action === "rain-alerts"
+  ) {
+    void changeRainAlerts(target.checked, target);
   }
 });
 

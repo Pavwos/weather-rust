@@ -15,6 +15,10 @@ export async function fetchWeather(
   return invoke<WeatherData>("fetch_weather", { city, units });
 }
 
+export async function checkRainAlerts(): Promise<void> {
+  await invoke<void>("check_rain_alerts");
+}
+
 export async function getConfig(): Promise<Config> {
   const config = await invoke<Config>("get_config");
   return {

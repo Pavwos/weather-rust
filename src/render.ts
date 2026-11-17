@@ -47,6 +47,17 @@ export function renderApp(root: HTMLElement, state: AppState): void {
         ${state.phase === "loading" ? '<p class="loading-copy" role="status">Atualizando a previsão…</p>' : ""}
       </div>
 
+      <label class="rain-alert-setting">
+        <input
+          type="checkbox"
+          data-action="rain-alerts"
+          ${state.config.rain_alerts ? "checked" : ""}
+          ${state.savingRainAlerts || state.phase === "loading" ? "disabled" : ""}
+        />
+        <span class="rain-alert-switch" aria-hidden="true"></span>
+        <span>Avisar quando for chover</span>
+      </label>
+
       ${
         weather
           ? renderWeather(weather, state)

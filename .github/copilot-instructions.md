@@ -27,6 +27,7 @@ App desktop pessoal de clima, feito em Rust com Tauri v2 e interface web local. 
 - `src-tauri/src/api.rs`: chamadas de geocodificação e forecast
 - `src-tauri/src/models.rs`: modelos Serde da API e do frontend
 - `src-tauri/src/config.rs`: leitura e escrita do `config.toml`
+- `src-tauri/src/rain_alert.rs`: detecção determinística de chuva e verificação em segundo plano
 - `src-tauri/src/weather_code.rs`: códigos WMO para descrição e chave de ícone
 
 Respeite essa organização. Não crie arquivos novos sem necessidade; se criar, explique por quê.
@@ -38,6 +39,9 @@ Respeite essa organização. Não crie arquivos novos sem necessidade; se criar,
 - Não use emoji na interface; use os SVGs locais do projeto.
 - Não use CDN: fontes, scripts, estilos e ícones devem ser locais ou do sistema.
 - Mantenha as permissões e capabilities do Tauri no mínimo necessário; não habilite plugins sem uso.
+- Avisos de chuva usam o plugin oficial de notificações do Tauri e permanecem desativados por padrão. O agendamento de 15 minutos e as verificações após buscas manuais rodam no backend, inclusive com a janela oculta.
+- A bandeja é criada no backend; com avisos ativos, fechar oculta a janela, e o menu permite abrir ou sair.
+- Justifique dependências Rust novas: `tauri-plugin-notification` envia notificações nativas, `tokio` com `time` agenda verificações, e os recursos `tray-icon`/`image-png` do Tauri fornecem a bandeja com o ícone local.
 - Funções pequenas, com uma responsabilidade só.
 - Comentários curtos em português, só onde o código não é óbvio.
 - Mensagens de erro e textos da interface sempre em português do Brasil.

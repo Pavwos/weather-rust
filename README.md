@@ -15,9 +15,11 @@ Aplicativo desktop para acompanhar o clima atual e a previsão da sua cidade.
 ## Funcionalidades
 
 - Busca de cidades e consulta do clima atual.
-- Previsão para cinco dias, com máximas, mínimas e chance de chuva.
+- Previsão por hora para as próximas 24 horas e para cinco dias, com máximas, mínimas e chance de chuva.
+- Resumo determinístico das condições esperadas para o dia.
 - Unidades em °C ou °F e opção para salvar uma cidade padrão.
 - Atualização automática a cada 15 minutos.
+- Avisos nativos opcionais quando há chuva prevista nas próximas duas horas; com o recurso ligado, fechar a janela a oculta na bandeja do sistema.
 - Atmosfera visual que acompanha o clima e o horário.
 - Dados da Open-Meteo, sem necessidade de chave de API.
 
@@ -52,7 +54,9 @@ No Windows, o executável fica em `src-tauri/target/release/clima.exe`. O instal
 
 ## Configuração
 
-As preferências incluem cidade padrão, última cidade pesquisada e unidade. No Windows, ficam em `%APPDATA%\weather-cli\config.toml`.
+As preferências incluem cidade padrão, última cidade pesquisada, unidade e avisos de chuva (desativados por padrão). Ao ativar os avisos, o Windows solicitará permissão para notificações. No Windows, as preferências ficam em `%APPDATA%\weather-cli\config.toml`.
+
+Com os avisos de chuva ativos, a janela pode ser reaberta pelo ícone do Clima na bandeja; o menu também permite sair do aplicativo.
 
 As chamadas de geocodificação e previsão usam a Open-Meteo e precisam de conexão com a internet. A interface e os recursos visuais são empacotados localmente.
 
@@ -60,6 +64,7 @@ As chamadas de geocodificação e previsão usam a Open-Meteo e precisam de cone
 
 - Rust
 - Tauri v2
+- Plugin oficial de notificações do Tauri
 - TypeScript
 - Vite
 - Open-Meteo

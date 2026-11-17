@@ -80,6 +80,11 @@ components:
     typography: "{typography.body}"
     padding: "0 1rem"
     height: "2.75rem"
+  toggle-rain-alert:
+    backgroundColor: "{colors.rain-dark}"
+    rounded: "{rounded.pill}"
+    typography: "{typography.label}"
+    height: "1.15rem"
 ---
 
 # Design System: Clima
@@ -168,6 +173,7 @@ Controles e campos usam cantos suaves de 0.6rem; alternância de unidades e bot�
 - **Style:** busca ocupa a largura disponível, altura 2.75rem, padding horizontal de 1rem, fundo de controle e borda de 1px.
 - **Focus:** contorno visível de 2px na cor de chuva, offset de 3px; hover desloca a borda na direção da cor de chuva.
 - **Error / Disabled:** mensagens de erro têm superfície própria; durante carregamento, o campo e as ações preservam o estado do app e os botões podem ser desativados.
+- **Rain alert toggle:** controle compacto ao lado da busca, com trilho pill e indicador na cor de chuva; o checkbox nativo mantém o rótulo acessível, foco visível e estado desativado durante o salvamento.
 
 ### Navigation
 - **Style:** cabeçalho horizontal com wordmark à esquerda e alternância de unidades/atualização à direita; controles permanecem compactos em telas estreitas.

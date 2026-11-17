@@ -5,6 +5,7 @@ export interface Config {
   default_city: string | null;
   units: Units;
   last_city: string | null;
+  rain_alerts: boolean;
 }
 
 export interface Location {
@@ -72,6 +73,7 @@ export interface AppState {
   weather: WeatherData | null;
   error: { kind: string; message: string } | null;
   notice: string | null;
+  savingRainAlerts: boolean;
 }
 
 export function createInitialState(): AppState {
@@ -83,9 +85,11 @@ export function createInitialState(): AppState {
       default_city: null,
       units: "metric",
       last_city: null,
+      rain_alerts: false,
     },
     weather: null,
     error: null,
     notice: null,
+    savingRainAlerts: false,
   };
 }

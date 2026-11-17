@@ -239,6 +239,79 @@
   padding: var(--space-1) 0 0;
 }
 
+.forecast-column {
+  min-width: 0;
+}
+
+.hourly-forecast {
+  padding-top: var(--space-3);
+}
+
+.hourly-list {
+  display: flex;
+  overflow-x: auto;
+  margin: 0;
+  padding: 0.25rem 0 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+  list-style: none;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.hourly-list:focus-visible {
+  outline: 2px solid var(--color-rain);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.hourly-item {
+  display: grid;
+  min-width: 4.1rem;
+  min-height: 6rem;
+  flex: 0 0 4.1rem;
+  align-content: space-between;
+  justify-items: center;
+  padding: 0.45rem 0.25rem;
+  border-top: 1px solid var(--color-border);
+  scroll-snap-align: start;
+  text-align: center;
+}
+
+.hourly-item + .hourly-item {
+  border-left: 1px solid var(--color-border);
+}
+
+.hourly-item:first-child .hourly-time {
+  color: var(--color-accent);
+  font-weight: 650;
+}
+
+.hourly-time {
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.hourly-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.hourly-temperature {
+  color: var(--color-ink);
+  font-size: 0.82rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.hourly-rain {
+  min-height: 0.85rem;
+  color: var(--color-rain);
+  font-size: 0.64rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .current-heading {
   justify-content: space-between;
   gap: var(--space-2);
@@ -540,8 +613,18 @@
     align-self: start;
   }
 
+  .forecast-column {
+    align-self: start;
+    padding-top: var(--space-5);
+  }
+
+  .hourly-forecast,
   .forecast {
     padding-top: var(--space-5);
+  }
+
+  .hourly-forecast {
+    padding-top: 0;
   }
 
   .forecast-day {

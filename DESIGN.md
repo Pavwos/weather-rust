@@ -145,6 +145,8 @@ O topo mantém marca e controles de unidade/atualização, seguido pela busca. E
 
 No mobile, o app-shell usa 0.5rem no topo, 1rem nas laterais e 0.75rem na base; no desktop, passa a 2rem no topo e laterais fluidas entre 2rem e 6rem. O ritmo vem da escala de 0.25rem a 2.5rem. A previsão é uma lista em linhas de pelo menos 2.5rem no mobile e 3.75rem no desktop, com um separador superior por dia.
 
+A faixa "Próximas horas" fica antes da lista diária e rola horizontalmente em uma única linha, com itens de largura compacta e alinhamento por snap. Em telas estreitas, mantém a largura do conteúdo e revela os horários seguintes por rolagem, sem comprimir os dados meteorológicos.
+
 ## Elevation & Depth
 
 O sistema não usa sombras. A profundidade vem do gradiente atmosférico radial, da opacidade das superfícies de controle e de bordas discretas; os dados permanecem planos, sem painéis ou cartões elevados.
@@ -173,6 +175,7 @@ Controles e campos usam cantos suaves de 0.6rem; alternância de unidades e bot�
 ### Weather Reading
 - **Current conditions:** cidade e localidade precedem condição e temperatura; um SVG meteorológico de traço acompanha a leitura atual.
 - **Metrics:** sensação, umidade e vento formam uma grade de três colunas; nascer e pôr do sol ficam em dois grupos com rótulo e horário.
+- **Hourly forecast:** faixa horizontal sem cartões, com horário, ícone, temperatura e precipitação relevante; tem foco visível, responde às setas e converte a roda vertical em rolagem horizontal.
 - **Forecast row:** data, ícone SVG, condição, chance de chuva e temperaturas máxima/mínima aparecem na mesma linha, separadas por borda superior; a mínima usa cor secundária e um divisor sutil.
 - **Sky atmosphere:** a condição do céu no elemento raiz escolhe o gradiente; variantes diurnas são quentes e noturnas frias, com paleta própria em cada tema.
 

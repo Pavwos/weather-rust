@@ -2,6 +2,7 @@ mod api;
 mod commands;
 mod config;
 mod models;
+mod summary;
 mod weather_code;
 
 pub fn run() {

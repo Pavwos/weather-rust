@@ -93,11 +93,12 @@ pub async fn fetch_forecast(city: &str, units: Units, days: u8) -> Result<Foreca
         ),
         (
             "hourly",
-            "temperature_2m,precipitation_probability,precipitation,weather_code,relative_humidity_2m,is_day"
+            "temperature_2m,precipitation_probability,precipitation,weather_code,relative_humidity_2m,is_day,wind_speed_10m"
                 .to_owned(),
         ),
         ("timezone", "auto".to_owned()),
         ("forecast_days", days.to_string()),
+        ("past_days", "1".to_owned()),
     ]);
 
     if units.is_imperial() {
@@ -187,6 +188,7 @@ mod tests {
                 relative_humidity_2m: Vec::new(),
                 weather_code: Vec::new(),
                 is_day: Vec::new(),
+                wind_speed_10m: Vec::new(),
             },
             daily: DailyWeather {
                 time: Vec::new(),

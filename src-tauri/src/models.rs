@@ -2,6 +2,8 @@ use anyhow::{bail, Result};
 use chrono::{SecondsFormat, Utc};
 use serde::{Deserialize, Serialize};
 
+const HOURLY_FORECAST_HOURS: usize = 24;
+
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Units {
@@ -59,6 +61,7 @@ pub struct HourlyWeather {
     pub relative_humidity_2m: Vec<u8>,
     pub weather_code: Vec<u8>,
     pub is_day: Vec<u8>,
+    pub wind_speed_10m: Vec<f64>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -99,7 +102,7 @@ pub struct CurrentData {
     pub icon: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HourForecast {
     pub time: String,
@@ -110,6 +113,7 @@ pub struct HourForecast {
     pub weather_code: u8,
     pub icon: String,
     pub is_day: bool,
+    pub wind_speed: f64,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -117,6 +121,7 @@ pub struct HourForecast {
 pub struct WeatherData {
     pub location: GeoResult,
     pub current: CurrentData,
+    pub summary: crate::summary::DaySummary,
     pub hourly: Vec<HourForecast>,
     pub daily: Vec<DayForecast>,
     pub units: Units,
@@ -129,7 +134,15 @@ impl ForecastResponse {
         let (current_description, current_icon) =
             crate::weather_code::describe(self.current.weather_code, current_is_day);
         let hourly = self.hourly.to_hour_forecasts(&self.current.time)?;
-        let daily = self.daily.to_day_forecasts()?;
+        let all_hourly = self.hourly.to_all_hour_forecasts()?;
+        let yesterday_max = self.daily.yesterday_max()?;
+        let summary = crate::summary::build_day_summary(
+            &self.current.time,
+            &all_hourly,
+            yesterday_max,
+            units,
+        );
+        let daily = self.daily.to_day_forecasts()?.into_iter().skip(1).collect();
 
         Ok(WeatherData {
             location: self.location,
@@ -143,6 +156,7 @@ impl ForecastResponse {
                 description: current_description.to_owned(),
                 icon: current_icon.to_owned(),
             },
+            summary,
             hourly,
             daily,
             units,
@@ -153,6 +167,10 @@ impl ForecastResponse {
 
 impl HourlyWeather {
     pub fn to_hour_forecasts(&self, current_time: &str) -> Result<Vec<HourForecast>> {
+        next_hour_forecasts(&self.to_all_hour_forecasts()?, current_time)
+    }
+
+    pub fn to_all_hour_forecasts(&self) -> Result<Vec<HourForecast>> {
         let length = self.time.len();
         if [
             self.temperature_2m.len(),
@@ -161,6 +179,7 @@ impl HourlyWeather {
             self.relative_humidity_2m.len(),
             self.weather_code.len(),
             self.is_day.len(),
+            self.wind_speed_10m.len(),
         ]
         .iter()
         .any(|&field_length| field_length != length)
@@ -168,15 +187,7 @@ impl HourlyWeather {
             bail!("A resposta horária da previsão contém arrays com tamanhos diferentes");
         }
 
-        let start = self
-            .time
-            .iter()
-            .position(|time| time == current_time)
-            .ok_or_else(|| {
-                anyhow::anyhow!("O horário atual não foi encontrado na previsão por hora")
-            })?;
-
-        Ok((start..length.min(start.saturating_add(24)))
+        Ok((0..length)
             .map(|index| {
                 let weather_code = self.weather_code[index];
                 let is_day = self.is_day[index] != 0;
@@ -190,30 +201,38 @@ impl HourlyWeather {
                     weather_code,
                     icon: icon.to_owned(),
                     is_day,
+                    wind_speed: self.wind_speed_10m[index],
                 }
             })
             .collect())
     }
 }
 
+fn next_hour_forecasts(hourly: &[HourForecast], current_time: &str) -> Result<Vec<HourForecast>> {
+    let start = hourly
+        .iter()
+        .position(|hour| hour.time == current_time)
+        .ok_or_else(|| {
+            anyhow::anyhow!("O horário atual não foi encontrado na previsão por hora")
+        })?;
+
+    Ok(hourly
+        .iter()
+        .skip(start)
+        .take(HOURLY_FORECAST_HOURS)
+        .cloned()
+        .collect())
+}
+
 impl DailyWeather {
     pub fn to_day_forecasts(&self) -> Result<Vec<DayForecast>> {
-        let length = self.time.len();
-        if [
-            self.weather_code.len(),
-            self.temperature_2m_max.len(),
-            self.temperature_2m_min.len(),
-            self.precipitation_probability_max.len(),
-            self.sunrise.len(),
-            self.sunset.len(),
-        ]
-        .iter()
-        .any(|&field_length| field_length != length)
-        {
-            bail!("A resposta diária da previsão contém arrays com tamanhos diferentes");
-        }
+        self.to_day_forecasts_from(0)
+    }
 
-        Ok((0..length)
+    fn to_day_forecasts_from(&self, start: usize) -> Result<Vec<DayForecast>> {
+        self.validate_lengths()?;
+
+        Ok((start.min(self.time.len())..self.time.len())
             .map(|index| {
                 let code = self.weather_code[index];
                 let (description, icon) = crate::weather_code::describe(code, true);
@@ -231,6 +250,29 @@ impl DailyWeather {
             })
             .collect())
     }
+
+    fn yesterday_max(&self) -> Result<Option<f64>> {
+        self.validate_lengths()?;
+        Ok(self.temperature_2m_max.first().copied())
+    }
+
+    fn validate_lengths(&self) -> Result<()> {
+        let length = self.time.len();
+        if [
+            self.weather_code.len(),
+            self.temperature_2m_max.len(),
+            self.temperature_2m_min.len(),
+            self.precipitation_probability_max.len(),
+            self.sunrise.len(),
+            self.sunset.len(),
+        ]
+        .iter()
+        .any(|&field_length| field_length != length)
+        {
+            bail!("A resposta diária da previsão contém arrays com tamanhos diferentes");
+        }
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -246,7 +288,8 @@ mod tests {
         "precipitation":[0.0,0.2],
         "relative_humidity_2m":[62,58],
         "weather_code":[0,61],
-        "is_day":[1,1]
+        "is_day":[1,1],
+        "wind_speed_10m":[10.0,11.0]
     }"#;
 
     const FORECAST_JSON: &str = r#"{
@@ -276,7 +319,8 @@ mod tests {
             "precipitation":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
             "relative_humidity_2m":[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60],
             "weather_code":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            "is_day":[0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]
+            "is_day":[0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
+            "wind_speed_10m":[10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0]
         },
         "daily":{
             "time":[],"weather_code":[],"temperature_2m_max":[],
@@ -296,18 +340,23 @@ mod tests {
             "is_day":1
         },
         "hourly":{
-            "time":["2026-11-16T08:00","2026-11-16T09:00","2026-11-16T10:00","2026-11-16T11:00"],
-            "temperature_2m":[18.0,19.0,20.0,21.0],
-            "precipitation_probability":[0,0,10,20],
-            "precipitation":[0.0,0.0,0.0,0.1],
-            "relative_humidity_2m":[65,62,60,58],
-            "weather_code":[0,0,0,61],
-            "is_day":[1,1,1,1]
+            "time":["2026-11-15T22:00","2026-11-15T23:00","2026-11-16T08:00","2026-11-16T09:00","2026-11-16T10:00","2026-11-16T11:00"],
+            "temperature_2m":[18.0,18.0,18.0,19.0,20.0,21.0],
+            "precipitation_probability":[0,0,0,0,10,20],
+            "precipitation":[0.0,0.0,0.0,0.0,0.0,0.1],
+            "relative_humidity_2m":[65,65,65,62,60,58],
+            "weather_code":[0,0,0,0,0,61],
+            "is_day":[0,0,1,1,1,1],
+            "wind_speed_10m":[10.0,10.0,10.0,10.0,10.0,10.0]
         },
         "daily":{
-            "time":[],"weather_code":[],"temperature_2m_max":[],
-            "temperature_2m_min":[],"precipitation_probability_max":[],
-            "sunrise":[],"sunset":[]
+            "time":["2026-11-15","2026-11-16","2026-11-17"],
+            "weather_code":[0,61,3],
+            "temperature_2m_max":[30.0,26.0,24.0],
+            "temperature_2m_min":[20.0,18.0,17.0],
+            "precipitation_probability_max":[0,50,20],
+            "sunrise":["2026-11-15T05:30","2026-11-16T05:31","2026-11-17T05:32"],
+            "sunset":["2026-11-15T18:20","2026-11-16T18:20","2026-11-17T18:21"]
         }
     }"#;
 
@@ -350,6 +399,7 @@ mod tests {
         assert_eq!(hours[0].weather_code, 0);
         assert_eq!(hours[0].icon, "clear-day");
         assert!(hours[0].is_day);
+        assert_eq!(hours[0].wind_speed, 10.0);
         assert_eq!(hours[1].icon, "rain");
     }
 
@@ -384,6 +434,12 @@ mod tests {
         assert_eq!(data.hourly[0].time, "2026-11-16T10:00");
         assert_eq!(data.hourly[0].temperature, 20.0);
         assert_eq!(data.hourly[1].time, "2026-11-16T11:00");
+        assert_eq!(data.daily.len(), 2);
+        assert_eq!(data.daily[0].date, "2026-11-16");
+        assert_eq!(
+            data.summary.headline,
+            "Sem previsão de chuva, e o dia será mais fresco que ontem."
+        );
     }
 
     #[test]
@@ -406,6 +462,9 @@ mod tests {
                 description: "Nublado".to_owned(),
                 icon: "cloudy".to_owned(),
             },
+            summary: crate::summary::DaySummary {
+                headline: "Dia tranquilo.".to_owned(),
+            },
             hourly: Vec::new(),
             daily: vec![DayForecast {
                 date: "2026-11-14".to_owned(),
@@ -426,6 +485,7 @@ mod tests {
         assert_eq!(value["location"]["admin1"], "São Paulo");
         assert_eq!(value["current"]["apparentTemperature"], 19.0);
         assert_eq!(value["current"]["isDay"], true);
+        assert_eq!(value["summary"]["headline"], "Dia tranquilo.");
         assert_eq!(value["hourly"], serde_json::json!([]));
         assert_eq!(value["daily"][0]["tempMax"], 26.0);
         assert_eq!(value["daily"][0]["precipitationProbability"], 70);

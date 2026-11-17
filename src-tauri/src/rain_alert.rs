@@ -128,10 +128,15 @@ fn notify_if_needed(app: &AppHandle, forecast: &ForecastResponse) -> Result<()> 
 fn alert_message(alert: &RainAlert) -> Result<String> {
     let starts_at = parse_datetime(&alert.starts_at)
         .ok_or_else(|| anyhow::anyhow!("O horário do aviso de chuva é inválido"))?;
+    let detail = if alert.probability >= RAIN_PROBABILITY_THRESHOLD {
+        format!("{}% de chance", alert.probability)
+    } else {
+        let precipitation = format!("{:.1}", alert.precipitation).replace('.', ",");
+        format!("{precipitation} mm previstos")
+    };
     Ok(format!(
-        "Chuva chegando por volta das {}h ({}% de chance). Leve o guarda-chuva.",
-        starts_at.hour(),
-        alert.probability
+        "Chuva chegando por volta das {}h ({detail}). Leve o guarda-chuva.",
+        starts_at.hour()
     ))
 }
 
@@ -143,7 +148,9 @@ fn parse_datetime(value: &str) -> Option<NaiveDateTime> {
 
 #[cfg(test)]
 mod tests {
-    use super::{next_rain, RainAlertDeduplicator, DEFAULT_HORIZON_HOURS};
+    use super::{
+        alert_message, next_rain, RainAlert, RainAlertDeduplicator, DEFAULT_HORIZON_HOURS,
+    };
     use crate::models::HourForecast;
     use std::time::{Duration, Instant};
 
@@ -152,7 +159,7 @@ mod tests {
             time: time.to_owned(),
             temperature: 20.0,
             precipitation_probability: probability,
-            precipitation: precipitation,
+            precipitation,
             humidity: 60,
             weather_code: 0,
             icon: "clear-day".to_owned(),
@@ -241,5 +248,28 @@ mod tests {
         deduplicator.mark_sent_at(now);
         assert!(!deduplicator.can_send_at(now + Duration::from_secs(3 * 60 * 60 - 1)));
         assert!(deduplicator.can_send_at(now + Duration::from_secs(3 * 60 * 60)));
+    }
+
+    #[test]
+    fn formats_alerts_with_the_relevant_rain_detail() {
+        let probability_alert = RainAlert {
+            starts_at: "2026-01-15T15:00".to_owned(),
+            probability: 70,
+            precipitation: 0.2,
+        };
+        assert_eq!(
+            alert_message(&probability_alert).expect("mensagem válida"),
+            "Chuva chegando por volta das 15h (70% de chance). Leve o guarda-chuva."
+        );
+
+        let precipitation_alert = RainAlert {
+            starts_at: "2026-01-15T16:00".to_owned(),
+            probability: 10,
+            precipitation: 0.3,
+        };
+        assert_eq!(
+            alert_message(&precipitation_alert).expect("mensagem válida"),
+            "Chuva chegando por volta das 16h (0,3 mm previstos). Leve o guarda-chuva."
+        );
     }
 }

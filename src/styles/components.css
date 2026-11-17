@@ -384,6 +384,18 @@
   letter-spacing: -0.055em;
 }
 
+.day-summary {
+  display: -webkit-box;
+  max-width: 34ch;
+  margin: 0.3rem 0 0;
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .weather-icon {
   flex: none;
   color: var(--color-accent);

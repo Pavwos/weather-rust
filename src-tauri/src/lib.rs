@@ -102,10 +102,13 @@ fn toggle_main_window(app: &AppHandle) -> anyhow::Result<()> {
     let window = app
         .get_webview_window("main")
         .ok_or_else(|| anyhow!("A janela principal do Clima não foi encontrada"))?;
-    if window
+    let is_visible = window
         .is_visible()
-        .context("Não foi possível verificar a visibilidade da janela")?
-    {
+        .context("Não foi possível verificar a visibilidade da janela")?;
+    let is_minimized = window
+        .is_minimized()
+        .context("Não foi possível verificar se a janela está minimizada")?;
+    if is_visible && !is_minimized {
         window
             .hide()
             .context("Não foi possível ocultar a janela do Clima")

@@ -2,6 +2,7 @@ mod api;
 mod commands;
 mod config;
 mod models;
+pub mod rain_alert;
 mod summary;
 mod weather_code;
 

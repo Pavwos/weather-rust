@@ -9,6 +9,8 @@ pub struct Config {
     pub default_city: Option<String>,
     pub units: String,
     pub last_city: Option<String>,
+    #[serde(default)]
+    pub rain_alerts: bool,
 }
 
 impl Default for Config {
@@ -17,6 +19,7 @@ impl Default for Config {
             default_city: None,
             units: "metric".to_owned(),
             last_city: None,
+            rain_alerts: false,
         }
     }
 }
@@ -78,6 +81,7 @@ mod tests {
         assert_eq!(config.default_city.as_deref(), Some("Curitiba"));
         assert_eq!(config.units, "imperial");
         assert_eq!(config.last_city, None);
+        assert!(!config.rain_alerts);
     }
 
     #[test]

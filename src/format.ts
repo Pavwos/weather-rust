@@ -40,6 +40,11 @@ export function formatTime(value: string): string {
   return match?.[1] ?? "—";
 }
 
+export function formatHour(value: string): string {
+  const match = value.match(/T(\d{2}):\d{2}/);
+  return match ? `${Number(match[1])}h` : "—";
+}
+
 export function formatUpdatedAt(value: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     hour: "2-digit",

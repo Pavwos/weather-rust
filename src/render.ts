@@ -2,6 +2,7 @@ import { actionIcon, weatherIcon } from "./icons";
 import {
   firstDay,
   formatForecastDay,
+  formatHour,
   formatPercent,
   formatTemperature,
   formatTime,
@@ -115,15 +116,53 @@ function renderWeather(weather: WeatherData, state: AppState): string {
         </p>
       </section>
 
-      <section class="forecast" aria-labelledby="forecast-title">
-        <div class="section-heading">
-          <h2 id="forecast-title">Próximos dias</h2>
-        </div>
-        <ul class="forecast-list">
-          ${weather.daily.map((day) => renderDay(day, weather.units)).join("")}
-        </ul>
-      </section>
+      <div class="forecast-column">
+        <section class="hourly-forecast" aria-labelledby="hourly-title">
+          <div class="section-heading">
+            <h2 id="hourly-title">Próximas horas</h2>
+          </div>
+          <ul class="hourly-list" tabindex="0" aria-label="Previsão por hora para ${escapeHtml(weather.location.name)}, próximas 24 horas">
+            ${weather.hourly.map((hour, index) => renderHour(hour, index, weather.units)).join("")}
+          </ul>
+        </section>
+
+        <section class="forecast" aria-labelledby="forecast-title">
+          <div class="section-heading">
+            <h2 id="forecast-title">Próximos dias</h2>
+          </div>
+          <ul class="forecast-list">
+            ${weather.daily.map((day) => renderDay(day, weather.units)).join("")}
+          </ul>
+        </section>
+      </div>
     </main>
+  `;
+}
+
+function renderHour(
+  hour: WeatherData["hourly"][number],
+  index: number,
+  units: Units,
+): string {
+  const time = index === 0 ? "Agora" : formatHour(hour.time);
+  const unit = units === "imperial" ? "Fahrenheit" : "Celsius";
+  const rainLabel =
+    hour.precipitationProbability >= 20
+      ? `chance de chuva ${formatPercent(hour.precipitationProbability)}`
+      : "sem chance significativa de chuva";
+  const accessibleLabel = `${time}, ${formatTemperature(hour.temperature)} graus ${unit}, ${rainLabel}`;
+
+  return `
+    <li class="hourly-item" aria-label="${escapeHtml(accessibleLabel)}">
+      <span class="hourly-time">${escapeHtml(time)}</span>
+      ${weatherIcon(hour.icon, "hourly-icon")}
+      <span class="hourly-temperature">${formatTemperature(hour.temperature)}°</span>
+      ${
+        hour.precipitationProbability >= 20
+          ? `<span class="hourly-rain">${formatPercent(hour.precipitationProbability)}</span>`
+          : '<span class="hourly-rain" aria-hidden="true"></span>'
+      }
+    </li>
   `;
 }
 

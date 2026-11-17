@@ -38,9 +38,21 @@ export interface DayForecast {
   sunset: string;
 }
 
+export interface HourForecast {
+  time: string;
+  temperature: number;
+  precipitationProbability: number;
+  precipitation: number;
+  humidity: number;
+  weatherCode: number;
+  icon: string;
+  isDay: boolean;
+}
+
 export interface WeatherData {
   location: Location;
   current: CurrentWeather;
+  hourly: HourForecast[];
   daily: DayForecast[];
   units: Units;
   fetchedAt: string;

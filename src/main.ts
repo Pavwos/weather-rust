@@ -176,6 +176,48 @@ root.addEventListener("click", (event) => {
   }
 });
 
+root.addEventListener("keydown", (event) => {
+  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+    return;
+  }
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) {
+    return;
+  }
+  const list = target.closest<HTMLElement>(".hourly-list");
+  if (!list) {
+    return;
+  }
+
+  const itemWidth = list.querySelector<HTMLElement>(".hourly-item")?.offsetWidth ?? 96;
+  event.preventDefault();
+  list.scrollBy({
+    left: event.key === "ArrowRight" ? itemWidth : -itemWidth,
+    behavior: "smooth",
+  });
+});
+
+root.addEventListener(
+  "wheel",
+  (event) => {
+    if (event.deltaY === 0 || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
+      return;
+    }
+    const target = event.target;
+    if (!(target instanceof Element)) {
+      return;
+    }
+    const list = target.closest<HTMLElement>(".hourly-list");
+    if (!list) {
+      return;
+    }
+
+    event.preventDefault();
+    list.scrollBy({ left: event.deltaY });
+  },
+  { passive: false },
+);
+
 window.addEventListener("focus", refreshIfStale);
 window.setInterval(refreshIfStale, refreshIntervalMs);
 

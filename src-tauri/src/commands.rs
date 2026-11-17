@@ -2,6 +2,7 @@ use crate::{
     api,
     config::Config,
     models::{Units, WeatherData},
+    rain_alert,
 };
 use serde::Serialize;
 
@@ -77,6 +78,13 @@ pub async fn fetch_weather(city: String, units: String) -> Result<WeatherData, A
         .map_err(ApiError::from_anyhow)?;
     forecast
         .into_weather_data(units)
+        .map_err(ApiError::from_anyhow)
+}
+
+#[tauri::command]
+pub async fn check_rain_alerts(app: tauri::AppHandle) -> Result<(), ApiError> {
+    rain_alert::check_last_city(&app)
+        .await
         .map_err(ApiError::from_anyhow)
 }
 

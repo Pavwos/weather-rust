@@ -1,7 +1,17 @@
-use chrono::{Duration, NaiveDateTime};
-use std::time::{Duration as StdDuration, Instant};
+use anyhow::{bail, Context, Result};
+use chrono::{Duration, NaiveDateTime, Timelike};
+use std::{
+    sync::Mutex,
+    time::{Duration as StdDuration, Instant},
+};
+use tauri::{AppHandle, Manager};
+use tauri_plugin_notification::NotificationExt;
 
-use crate::models::HourForecast;
+use crate::{
+    api,
+    config::Config,
+    models::{ForecastResponse, HourForecast, Units},
+};
 
 pub const DEFAULT_HORIZON_HOURS: u8 = 2;
 const RAIN_PROBABILITY_THRESHOLD: u8 = 60;
@@ -56,6 +66,73 @@ impl RainAlertDeduplicator {
     pub fn mark_sent_at(&mut self, now: Instant) {
         self.last_sent_at = Some(now);
     }
+}
+
+#[derive(Default)]
+pub struct RainAlertState(pub Mutex<RainAlertDeduplicator>);
+
+pub async fn check_last_city(app: &AppHandle) -> Result<()> {
+    let config = Config::load()?;
+    if !config.rain_alerts {
+        return Ok(());
+    }
+
+    let Some(city) = config
+        .last_city
+        .as_deref()
+        .map(str::trim)
+        .filter(|city| !city.is_empty())
+    else {
+        return Ok(());
+    };
+    let units = match config.units.as_str() {
+        "metric" => Units::Metric,
+        "imperial" => Units::Imperial,
+        _ => bail!("A unidade salva para o aviso de chuva é inválida"),
+    };
+    let forecast = api::fetch_forecast(city, units, 5)
+        .await
+        .context("Não foi possível consultar a previsão para o aviso de chuva")?;
+
+    notify_if_needed(app, &forecast)
+}
+
+fn notify_if_needed(app: &AppHandle, forecast: &ForecastResponse) -> Result<()> {
+    let hourly = forecast
+        .hourly
+        .to_hour_forecasts(&forecast.current.time)
+        .context("Não foi possível converter a previsão por hora para o aviso")?;
+    let Some(alert) = next_rain(&hourly, &forecast.current.time, DEFAULT_HORIZON_HOURS) else {
+        return Ok(());
+    };
+    let now = Instant::now();
+    let state = app.state::<RainAlertState>();
+    let mut deduplicator = state
+        .0
+        .lock()
+        .map_err(|_| anyhow::anyhow!("Não foi possível acessar a deduplicação dos avisos"))?;
+    if !deduplicator.can_send_at(now) {
+        return Ok(());
+    }
+
+    app.notification()
+        .builder()
+        .title(format!("Clima: {}", forecast.location.name))
+        .body(alert_message(&alert)?)
+        .show()
+        .context("Não foi possível exibir a notificação de chuva")?;
+    deduplicator.mark_sent_at(now);
+    Ok(())
+}
+
+fn alert_message(alert: &RainAlert) -> Result<String> {
+    let starts_at = parse_datetime(&alert.starts_at)
+        .ok_or_else(|| anyhow::anyhow!("O horário do aviso de chuva é inválido"))?;
+    Ok(format!(
+        "Chuva chegando por volta das {}h ({}% de chance). Leve o guarda-chuva.",
+        starts_at.hour(),
+        alert.probability
+    ))
 }
 
 fn parse_datetime(value: &str) -> Option<NaiveDateTime> {

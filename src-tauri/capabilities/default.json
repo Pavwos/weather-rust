@@ -3,5 +3,8 @@
   "identifier": "default",
   "description": "Acesso mínimo da janela principal aos comandos do Clima.",
   "windows": ["main"],
-  "permissions": []
+  "permissions": [
+    "notification:allow-is-permission-granted",
+    "notification:allow-request-permission"
+  ]
 }

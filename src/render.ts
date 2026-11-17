@@ -87,6 +87,7 @@ function renderWeather(weather: WeatherData, state: AppState): string {
           <div class="temperature-block">
             <p class="condition">${escapeHtml(current.description)}</p>
             <p class="temperature">${formatTemperature(current.temperature)}<span>${weather.units === "imperial" ? "°F" : "°C"}</span></p>
+            <p class="day-summary" aria-live="polite">${escapeHtml(weather.summary.headline)}</p>
           </div>
           ${weatherIcon(current.icon, "current-icon")}
         </div>

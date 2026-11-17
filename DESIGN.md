@@ -173,7 +173,7 @@ Controles e campos usam cantos suaves de 0.6rem; alternância de unidades e bot�
 - **Style:** cabeçalho horizontal com wordmark à esquerda e alternância de unidades/atualização à direita; controles permanecem compactos em telas estreitas.
 
 ### Weather Reading
-- **Current conditions:** cidade e localidade precedem condição e temperatura; um SVG meteorológico de traço acompanha a leitura atual.
+- **Current conditions:** cidade e localidade precedem condição e temperatura; um SVG meteorológico de traço acompanha a leitura atual. Uma frase determinística resume o dia logo abaixo da temperatura, em texto secundário de até duas linhas.
 - **Metrics:** sensação, umidade e vento formam uma grade de três colunas; nascer e pôr do sol ficam em dois grupos com rótulo e horário.
 - **Hourly forecast:** faixa horizontal sem cartões, com horário, ícone, temperatura e precipitação relevante; tem foco visível, responde às setas e converte a roda vertical em rolagem horizontal.
 - **Forecast row:** data, ícone SVG, condição, chance de chuva e temperaturas máxima/mínima aparecem na mesma linha, separadas por borda superior; a mínima usa cor secundária e um divisor sutil.

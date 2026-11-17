@@ -47,11 +47,17 @@ export interface HourForecast {
   weatherCode: number;
   icon: string;
   isDay: boolean;
+  windSpeed: number;
+}
+
+export interface DaySummary {
+  headline: string;
 }
 
 export interface WeatherData {
   location: Location;
   current: CurrentWeather;
+  summary: DaySummary;
   hourly: HourForecast[];
   daily: DayForecast[];
   units: Units;

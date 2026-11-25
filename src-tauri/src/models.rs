@@ -1,5 +1,5 @@
 use anyhow::{bail, Result};
-use chrono::{SecondsFormat, Utc};
+use chrono::{NaiveDateTime, SecondsFormat, Utc};
 use serde::{Deserialize, Serialize};
 
 const HOURLY_FORECAST_HOURS: usize = 24;
@@ -209,12 +209,30 @@ impl HourlyWeather {
 }
 
 fn next_hour_forecasts(hourly: &[HourForecast], current_time: &str) -> Result<Vec<HourForecast>> {
+    let current = NaiveDateTime::parse_from_str(current_time, "%Y-%m-%dT%H:%M")
+        .ok()
+        .or_else(|| NaiveDateTime::parse_from_str(current_time, "%Y-%m-%dT%H:%M:%S").ok());
+
     let start = hourly
         .iter()
         .position(|hour| hour.time == current_time)
-        .ok_or_else(|| {
-            anyhow::anyhow!("O horário atual não foi encontrado na previsão por hora")
-        })?;
+        .or_else(|| match current {
+            Some(current) => hourly
+                .iter()
+                .enumerate()
+                .filter_map(|(index, hour)| {
+                    NaiveDateTime::parse_from_str(&hour.time, "%Y-%m-%dT%H:%M")
+                        .ok()
+                        .filter(|hour| *hour <= current)
+                        .map(|_| index)
+                })
+                .next_back(),
+            None => None,
+        });
+
+    let start = start.ok_or_else(|| {
+        anyhow::anyhow!("O horário atual não foi encontrado na previsão por hora")
+    })?;
 
     Ok(hourly
         .iter()
@@ -401,6 +419,18 @@ mod tests {
         assert!(hours[0].is_day);
         assert_eq!(hours[0].wind_speed, 10.0);
         assert_eq!(hours[1].icon, "rain");
+    }
+
+    #[test]
+    fn starts_hourly_forecast_at_the_current_whole_hour() {
+        let hourly: HourlyWeather =
+            serde_json::from_str(HOURLY_JSON).expect("JSON de teste válido");
+        let hours = hourly
+            .to_hour_forecasts("2026-11-16T09:15")
+            .expect("horário atual arredondado");
+
+        assert_eq!(hours.len(), 2);
+        assert_eq!(hours[0].time, "2026-11-16T09:00");
     }
 
     #[test]
